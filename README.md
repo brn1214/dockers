@@ -150,3 +150,85 @@ f288e3d33a08: Layer already exists
 bb01bd7e32b5: Layer already exists
 1.0.0: digest: sha256:c6c1913659732934d23b0bd84ec5a70fd01f94b8f58c2feaf06536eef4dcdb76 size: 2200
 ```
+![1](https://github.com/brn1214/dockers/assets/127547589/c1adf620-b3d5-4084-8ac3-5bd37c424b3c)
+
+## Step 6
+We copy the image
+```shell
+PS C:\Users\pret_\OneDrive\Documentos\ITMO\Practice 4> docker compose build
+[+] Building 1.8s (11/11) FINISHED
+ => [internal] load .dockerignore                                                    0.0s 
+ => => transferring context: 2B                                                      0.0s 
+ => [internal] load build definition from Dockerfile                                 0.0s 
+ => => transferring dockerfile: 1.28kB                                               0.0s 
+ => [internal] load metadata for docker.io/library/python:3.10-alpine                1.7s 
+ => [auth] library/python:pull token for registry-1.docker.io                        0.0s 
+ => [internal] load build context                                                    0.0s 
+ => => transferring context: 30B                                                     0.0s 
+ => [1/5] FROM docker.io/library/python:3.10-alpine@sha256:def82962a6ee048e54b5bec2  0.0s 
+ => CACHED [2/5] RUN pip install --no-cache-dir Flask==2.2.*                         0.0s 
+ => CACHED [3/5] RUN addgroup -g 1001 -S app    && adduser -u 1001 -S app -G app     0.0s 
+ => CACHED [4/5] WORKDIR /app                                                        0.0s 
+ => CACHED [5/5] COPY --chown=app:app server.py /app                                 0.0s 
+ => exporting to image                                                               0.0s 
+ => => exporting layers                                                              0.0s 
+ => => writing image sha256:061467f54c641ff897c0e5505206cbdd32ebf7cf7742c1161d995cc  0.0s 
+ => => naming to docker.io/brn12/server:1.0.0                                        0.0s 
+[+] Building 0.5s (9/9) FINISHED
+ => [internal] load .dockerignore                                                    0.0s 
+ => => transferring context: 2B                                                      0.0s 
+ => [internal] load build definition from Dockerfile                                 0.0s 
+ => => transferring dockerfile: 926B                                                 0.0s 
+ => [internal] load metadata for docker.io/library/python:3.10-alpine                0.5s 
+ => [internal] load build context                                                    0.0s 
+ => => transferring context: 31B                                                     0.0s 
+ => [1/4] FROM docker.io/library/python:3.10-alpine@sha256:def82962a6ee048e54b5bec2  0.0s 
+ => CACHED [2/4] RUN addgroup -g 1001 -S app     && adduser -u 1001 -S app -G app    0.0s 
+ => CACHED [3/4] WORKDIR /app                                                        0.0s 
+ => CACHED [4/4] COPY --chown=app:app client.py /app                                 0.0s 
+ => exporting to image                                                               0.0s 
+ => => exporting layers                                                              0.0s 
+ => => naming to docker.io/brn12/client:1.0.0 
+ ```
+ And we run it
+ ```shell
+ PS C:\Users\pret_\OneDrive\Documentos\ITMO\Practice 4> docker compose up
+[+] Running 3/3
+ ✔ Container practice4-server-1                                      Created         0.1s 
+ ! server Published ports are discarded when using host network mode                 0.0s 
+ ✔ Container practice4-client-1                                      Created         0.1s 
+Attaching to practice4-client-1, practice4-server-1
+practice4-server-1  |  * Serving Flask app 'server.py'
+practice4-server-1  |  * Debug mode: off
+practice4-server-1  | WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+practice4-server-1  |  * Running on all addresses (0.0.0.0)
+practice4-server-1  |  * Running on http://127.0.0.1:8000
+practice4-server-1  |  * Running on http://192.168.65.4:8000
+practice4-server-1  | Press CTRL+C to quit
+```
+Finally we check the logs
+ ```shell
+PS C:\Users\pret_\OneDrive\Documentos\ITMO\Practice 4> docker logs practice4-server-1     
+ * Serving Flask app 'server.py'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.65.4:8000
+Press CTRL+C to quit
+127.0.0.1 - - [23/May/2023 19:30:01] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2023 19:30:17] "GET / HTTP/1.1" 200 -
+ * Serving Flask app 'server.py'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.65.4:8000
+Press CTRL+C to quit
+127.0.0.1 - - [23/May/2023 19:33:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2023 19:33:34] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2023 19:33:35] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2023 19:33:37] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2023 19:33:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2023 19:33:39] "GET / HTTP/1.1" 200 -
+ ```shell
